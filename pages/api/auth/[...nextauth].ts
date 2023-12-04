@@ -1,6 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
+import init from "../../../db";
 
 const authOptions : NextAuthOptions = {
     session: {
@@ -12,13 +13,17 @@ const authOptions : NextAuthOptions = {
             type: 'credentials',
             name: 'credentials',
             credentials: {
-                email : {label:'Email', type:'email'},
+                nama_suplier : {label:'nama_suplier', type:'text'},
+                email : {label:'email', type:'email'},
             },
             async authorize (credentials) {
-                const {email} = credentials as {
+                const {nama_suplier, email} = credentials as {
+                    nama_suplier:string,
                     email:string,
                 };
-                const user : any = {id:1, email:email};
+                const db = await init();
+                const hasil = await db.get('SELECT * FROM suplier WHERE nama_suplier = ? AND email = ?', nama_suplier, email);
+                const user : any = hasil
                 if (user) {
                     return user;
                 } else {
@@ -28,9 +33,10 @@ const authOptions : NextAuthOptions = {
         })
     ],
     callbacks: {
-        jwt: async ({token, account, profile , user}) => {
+        jwt: async ({token, account, profile , user} : any) => {
             if (account?.provider === 'credentials') {
                 token.email = user.email;
+                token.name = user.id_suplier;
             }
             return token;
         },
@@ -39,8 +45,14 @@ const authOptions : NextAuthOptions = {
             if ('email' in token){
                 session.user.email = token.email
             }
+            if ('name' in token){
+                session.user.name = token.name
+            }
             return session
         }
+    },
+    pages: {
+        signIn: '/products/login',
     }
 }
 

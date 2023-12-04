@@ -1,10 +1,16 @@
 // pages/products/create.tsx
 import Navbar from '@/component/navbar/navbar';
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/router';
+
 
 const CreateProduct = () => {
-  const{data} = useSession()
+  const {push} = useRouter()
+  const { data: session } = useSession();
+  console.log(session)
+  const idSuplier : any = session?.user?.name;
+  console.log(idSuplier)
 
   const [foto, setFoto] = useState('');
   const [file, setFile] = useState<File>();
@@ -13,11 +19,10 @@ const CreateProduct = () => {
     deskripsi: '',
     harga: '',
     stok: '',
-    suplier_id: '',
     photo_url: '',
   });
 
-const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -36,7 +41,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       formDataObject.append('harga', formData.harga);
       formDataObject.append('stok', formData.stok);
       formDataObject.append('foto', file);
-      formDataObject.append('suplier_id', formData.suplier_id);
+      formDataObject.append('suplier_id', idSuplier);
 
       console.log(formData)
       console.log(formDataObject)
@@ -50,6 +55,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
       if (response.ok) {
         console.log('Product created successfully');
+        push("/")
         // Redirect atau lakukan aksi lain setelah produk dibuat
       } else {
         console.error('Failed to create product');
@@ -61,7 +67,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   return (
     <>
-      <Navbar/>
+    <Navbar/>
     <div className='container'>
       <h1 className='text-center mt-3'>Create Product</h1>
       <form className='d-flex flex-column col-4' onSubmit={handleSubmit}>
@@ -97,10 +103,6 @@ const handleSubmit = async (e: React.FormEvent) => {
               <p>Select image</p>
             )}
           </div>
-        </label>
-        <label className='form-label'>
-          Suplier ID:
-          <input className='form-control' type="text" name="suplier_id" value={formData.suplier_id} onChange={handleChange} />
         </label>
         <button className='btn btn-primary' type="submit">Create Product</button>
       </form>

@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 
 const UpdateProduct = () => {
     const router = useRouter();
+    const {push} = useRouter();
     const { id } = router.query;
   const [foto, setFoto] = useState('');
   const [file, setFile] = useState<File>();
@@ -69,6 +70,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
       if (response.ok) {
         console.log('Product updated successfully');
+        push("/")
         // Redirect atau lakukan aksi lain setelah produk dibuat
       } else {
         console.error('Failed to updated product');

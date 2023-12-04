@@ -18,11 +18,23 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     cb(null, file.originalname);
   },
+
 });
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 2 * 1024 * 1024 }, // Batasan ukuran file menjadi 2 MB
+  fileFilter: (req, file, cb) => {
+    const allowedFileExtensions = ['.png', '.jpg', '.jpeg'];
 
-// Inisialisasi objek Multer dengan konfigurasi
-const upload = multer({ storage: storage });
-
+    // Periksa ekstensi file
+    const extname = path.extname(file.originalname).toLowerCase();
+    if (allowedFileExtensions.includes(extname)) {
+      return cb(null, true);
+    } else {
+      return cb(new Error('Only .png, .jpg, and .jpeg files are allowed'));
+    }
+  },
+});
 export default async function multerUpload(req :any, res : any) {
   const db = await init();
   
