@@ -1,4 +1,3 @@
-// api/register.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import init from '../../../db';
 

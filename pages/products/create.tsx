@@ -1,4 +1,3 @@
-// pages/products/create.tsx
 import Navbar from '@/component/navbar/navbar';
 import { useState , useEffect } from 'react';
 import { useSession } from 'next-auth/react'
@@ -34,7 +33,6 @@ const handleSubmit = async (e: React.FormEvent) => {
 
     try {
       if(!file) return;
-      // Create FormData object to handle file upload
       const formDataObject = new FormData();
       formDataObject.append('nama', formData.nama);
       formDataObject.append('deskripsi', formData.deskripsi);
@@ -46,8 +44,6 @@ const handleSubmit = async (e: React.FormEvent) => {
       console.log(formData)
       console.log(formDataObject)
 
-
-      // Panggil API untuk membuat produk menggunakan metode POST
       const response = await fetch('/api/products/create', {
         method: 'POST',
         body: formDataObject,
@@ -56,7 +52,6 @@ const handleSubmit = async (e: React.FormEvent) => {
       if (response.ok) {
         console.log('Product created successfully');
         push("/")
-        // Redirect atau lakukan aksi lain setelah produk dibuat
       } else {
         console.error('Failed to create product');
       }

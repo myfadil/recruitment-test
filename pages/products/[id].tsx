@@ -1,4 +1,3 @@
-// pages/products/[id].tsx
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -20,7 +19,6 @@ const ProductDetail = () => {
   });
 
   useEffect(() => {
-    // Panggil API untuk mendapatkan detail produk menggunakan metode GET
     const fetchProduct = async () => {
       try {
         const response = await fetch(`/api/products/${id}`);
@@ -43,7 +41,6 @@ const ProductDetail = () => {
 
   const handleDelete = async () => {
     try {
-      // Panggil API untuk menghapus produk menggunakan metode DELETE
       const response = await fetch(`/api/products/${id}`, {
         method: 'DELETE',
       });
@@ -51,7 +48,6 @@ const ProductDetail = () => {
       if (response.ok) {
         console.log('Product deleted successfully');
         push("/")
-        // Redirect atau lakukan aksi lain setelah produk dihapus
       } else {
         console.error('Failed to delete product');
       }
@@ -79,26 +75,15 @@ const ProductDetail = () => {
 
     </div>
     <div className='container d-flex gap-5 justify-content-center align-items-center'>
-      {/* Tombol untuk memperbarui produk */}
       <Link href={`/products/update/${id}`} >
         <button className='btn btn-primary'>
           Update Product
         </button>
         </Link>
-
-      {/* Tombol untuk menghapus produk */}
       <button className='btn btn-danger' onClick={handleDelete}>Delete Product</button>
     </div>
     </>
   );
 };
 
-{/* <h1>Product Detail</h1>
-<p>ID: {product.id}</p>
-<p>Nama: {product.nama}</p>
-<p>Deskripsi: {product.deskripsi}</p>
-<p>Harga: {product.harga}</p>
-<p>Stok: {product.stok}</p>
-<p>Foto: {product.foto}</p>
-<p>Suplier ID: {product.suplier_id}</p> */}
 export default ProductDetail;

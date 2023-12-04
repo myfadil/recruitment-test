@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
-// Definisikan interface untuk bentuk data produk
 interface Product {
   id: number;
   nama: string;
@@ -12,24 +11,20 @@ interface Product {
   suplier_id: number;
   foto: string;
   nama_suplier: string;
-  // Tambahkan properti lain sesuai kebutuhan
 }
 
 const ListProducts: React.FC = () => {
-  // State untuk menyimpan hasil data
   const [products, setProducts] = useState<Product[]>([]);
   const {data} = useSession()
   console.log(data)
 
   useEffect(() => {
-    // Lakukan permintaan data dengan fetch
     axios.get("/api/products/getAllProduk")
       .then((response) => {
-        // Set state dengan data yang diterima
         setProducts(response.data.data);
         console.log(response.data.data);
       })
-  }, []); // Masukkan array kosong agar useEffect dijalankan hanya sekali setelah render pertama
+  }, []);
 
   return (
     <div className="container">
